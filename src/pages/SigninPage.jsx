@@ -6,10 +6,11 @@ import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 
 import logo from "../assets/images/TM full.png";
+// import "../assets/scss/main.scss";
 
 import "../assets/scss/main.scss";
 
-const RegisterPage = () => {
+const SigninPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -56,7 +57,7 @@ const RegisterPage = () => {
         <img src={logo} alt="Task Manager Logo" className="logo" />
       </header>
       <div className="login-box">
-        <h2>Sign up</h2>
+        <h2>Sign in</h2>
 
         <form onSubmit={handleLogin}>
           <div className="input-group">
@@ -94,10 +95,10 @@ const RegisterPage = () => {
           {error && <div className="error-message">{error}</div>}
 
           <button type="submit" className="login-button">
-            Sign up
+            Sign in
           </button>
           <p>
-            Already have an account? <a href="/">Sign in</a>{" "}
+            Don’t have an account? <a href="/register">Create now</a>{" "}
           </p>
         </form>
       </div>
@@ -105,4 +106,4 @@ const RegisterPage = () => {
   );
 };
 
-export default RegisterPage;
+export default SigninPage;
