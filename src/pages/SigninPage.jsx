@@ -4,17 +4,18 @@ import EyeSlash from "../assets/icons/EyeSlash.svg";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
-
 import logo from "../assets/images/TM full.png";
-// import "../assets/scss/main.scss";
-
+import api from "../network/api";
 import "../assets/scss/main.scss";
+import { useAuth } from "../context/AuthContext";
 
 const SigninPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const togglePasswordVisibility = () => {
@@ -24,33 +25,39 @@ const SigninPage = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    // Mock validation - replace with real API call later
-    if (!username || !password) {
+    if (!username.trim() || !password.trim()) {
       toast.error("Please enter both username and password");
+      setIsLoading(false);
       return;
     }
 
-    // Mock successful login
-    toast.success("Login successful (mock)");
-    console.log("Mock login with:", { username, password });
+    try {
+      // Make API call to login endpoint
+      const response = await api.post(
+        "/auth/login",
+        {
+          username: username.trim(),
+          password: password.trim(),
+        },
+        {
+          withCredentials: true,
+        }
+      );
 
-    // Mock navigation
-    setTimeout(() => {
-      navigate("/dashboard"); // Redirect to dashboard after "login"
-    }, 1500);
+      toast.success(response.data.message || "Login successful");
 
-    /* 
-      REAL IMPLEMENTATION (COMMENTED OUT)
-      try {
-        const response = await api.post("user/login", { username, password });
-        const { token } = response.data.data;
-        // ... rest of your auth logic
-      } catch (error) {
-        toast.error("Invalid Username or Password.");
-      }
-      */
+      navigate("/dashboard");
+    } catch (error) {
+      // Handle API errors
+      const errorMessage =
+        error.response?.data?.message ||
+        error.message ||
+        "Login failed. Please try again.";
+      toast.error(errorMessage);
+    } finally {
+      setIsLoading(false);
+    }
   };
-
   return (
     <div className="login-container">
       <header className="header">
@@ -94,7 +101,11 @@ const SigninPage = () => {
 
           {error && <div className="error-message">{error}</div>}
 
-          <button type="submit" className="login-button">
+          <button
+            type="submit"
+            // onSubmit="handleSubmit"
+            className="login-button"
+          >
             Sign in
           </button>
           <p>

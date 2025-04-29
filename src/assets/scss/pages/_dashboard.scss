@@ -1,48 +1,126 @@
 .dashboard {
-  height: 100vh;
-  //   display: flex;
-
   background-color: #f5f7fa;
-  .dashboard-title {
-    text-align: center;
-    font-size: 48px;
-    font-weight: 800;
-    margin-top: 0px;
+  padding-bottom: 20px;
+  height: 100vh;
+
+  .dashboard-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     padding: 20px;
-    color: #1c4532;
+    .dashboard-title {
+      font-size: 48px;
+      font-weight: 800;
+      color: #1c4532;
+      margin: 0;
+      text-align: center;
+      flex: 1;
+    }
+    .logout {
+      img {
+        width: 40px;
+        height: 40px;
+        cursor: pointer;
+      }
+    }
   }
   .dashboard-container {
     display: flex;
+    flex-direction: column; // make it a column
+    justify-content: space-between; // space between tasks and button
     align-items: center;
-    justify-content: center;
     max-width: 80%;
+    min-width: 50%;
     margin: 0 auto;
     background-color: white;
     padding: 32px;
     border-radius: 20px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    height: fit-content;
+    // height: 600px; // give fixed height or min-height
     width: fit-content;
+    // margin-bottom: 20px;
   }
   .no-task {
-    min-height: autox;
-    width: auto;
+    // height: auto;
+    width: 80%;
+
     color: #1c4532;
     font-weight: 600;
     font-size: 16px;
+    .empty-task {
+      border: 2px dashed #133224;
+      border-radius: 8px;
+      padding: 20px;
+
+      align-items: center;
+      justify-content: center;
+      display: flex;
+    }
   }
-  button {
-    background-color: #1c4532;
-    color: white;
-    padding: 12px;
-    border: none;
-    border-radius: 20px;
+  .task-list {
+    // border: 1px solid black;
+    // padding: 10px;
     width: 100%;
-    font-size: 16px;
-    font-weight: 400;
-    cursor: pointer;
+    flex: 1; // take all available space above the button
+    overflow-y: auto; // if too many tasks, scroll
+    .task-item {
+      .task-item-content {
+        padding: 10px;
+
+        &:hover {
+          background-color: rgb(28, 69, 50, 0.2);
+          border-radius: 8px;
+        }
+        .delete-icon {
+          display: flex;
+          color: #1c4532;
+          width: 30px;
+          height: 30px;
+          &:hover {
+            color: #133224;
+            cursor: pointer;
+          }
+        }
+
+        .task-info {
+          .task-title {
+            font-size: 24px;
+            color: #1c4532;
+          }
+          .task-desc {
+            font-size: 16px;
+          }
+        }
+      }
+      .task-separator {
+        border: none;
+        height: 2px;
+        background-color: #133224;
+        margin: 1.5rem 0;
+        border-radius: 2px;
+      }
+    }
   }
-  button:hover {
-    background-color: #133224;
+  .add-task {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+
+    button {
+      background-color: #1c4532;
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 12px;
+      width: 40%;
+      font-size: 16px;
+      font-weight: 400;
+      cursor: pointer;
+      text-align: center;
+    }
+    button:hover {
+      background-color: #133224;
+    }
   }
 }

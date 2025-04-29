@@ -4,9 +4,8 @@ import EyeSlash from "../assets/icons/EyeSlash.svg";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
-
 import logo from "../assets/images/TM full.png";
-
+import api from "../network/api";
 import "../assets/scss/main.scss";
 
 const RegisterPage = () => {
@@ -20,7 +19,7 @@ const RegisterPage = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleLogin = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
 
     // Mock validation - replace with real API call later
@@ -28,26 +27,34 @@ const RegisterPage = () => {
       toast.error("Please enter both username and password");
       return;
     }
+    try {
+      const response = await api.post(
+        "/auth/register",
+        {
+          username: username.trim(),
+          password: password.trim(),
+        },
+        {
+          withCredentials: true,
+        }
+      );
 
-    // Mock successful login
-    toast.success("Login successful (mock)");
-    console.log("Mock login with:", { username, password });
+      toast.success(response.data.message);
 
-    // Mock navigation
-    setTimeout(() => {
-      navigate("/dashboard"); // Redirect to dashboard after "login"
-    }, 1500);
-
-    /* 
-      REAL IMPLEMENTATION (COMMENTED OUT)
-      try {
-        const response = await api.post("user/login", { username, password });
-        const { token } = response.data.data;
-        // ... rest of your auth logic
-      } catch (error) {
-        toast.error("Invalid Username or Password.");
+      // Redirect to login page after register
+      navigate("/login");
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message ||
+        error.message ||
+        "Registration failed. Please try again.";
+      if (errorMessage === "User already exists") {
+        toast.error("Username already exists");
+      } else {
+        toast.error("Username already exists");
       }
-      */
+      //   toast.error("User already exists");
+    }
   };
 
   return (
@@ -58,7 +65,7 @@ const RegisterPage = () => {
       <div className="login-box">
         <h2>Sign up</h2>
 
-        <form onSubmit={handleLogin}>
+        <form onSubmit={handleRegister}>
           <div className="input-group">
             <label htmlFor="username">Username</label>
             <input
@@ -71,7 +78,6 @@ const RegisterPage = () => {
               required
             />
           </div>
-
           <div className="input-group password-container">
             <label htmlFor="password">Password</label>
             <input
@@ -90,14 +96,13 @@ const RegisterPage = () => {
               />
             </div>
           </div>
-
-          {error && <div className="error-message">{error}</div>}
+          {error && <div className="error-message"></div>}
 
           <button type="submit" className="login-button">
             Sign up
           </button>
           <p>
-            Already have an account? <a href="/">Sign in</a>{" "}
+            Already have an account? <a href="/login">Sign in</a>
           </p>
         </form>
       </div>
